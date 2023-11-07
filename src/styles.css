@@ -1,0 +1,10 @@
+.selected {
+  width: 150px;
+  background-color: grey;
+}
+.app {
+  display: flex;
+  margin-right: 40px;
+  margin-top: 40px;
+  margin-left: 40px;
+}

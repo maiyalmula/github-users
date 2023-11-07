@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./styles.css";
+import Input from "./components/Input/Input";
+import List from "./components/List/List";
+import Info from "./components/Info/Info";
+import axios from "axios";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectUser, setSelectUser] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("it-kamasutra");
+
+  useEffect(() => {
+    axios
+      .get(`https://api.github.com/search/users?q=${searchTerm}`)
+      .then((res) => {
+        setUsers(res.data.items);
+      });
+  }, [searchTerm]);
 
   return (
-    <>
+    <div className="app">
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Input
+          setUsers={setUsers}
+          value={""}
+          onSubmit={(value) => {
+            setSearchTerm(value);
+          }}
+        />
+        <List
+          users={users}
+          setSelectUser={setSelectUser}
+          selectUser={selectUser}
+        />
+        <Info selectUser={selectUser} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
