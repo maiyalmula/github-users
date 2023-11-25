@@ -1,19 +1,25 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
-const List = ({ users, setSelectUser, selectUser }) => {
+const List = (props) => {
+  const [users, setUsers] = useState([]);
+
   useEffect(() => {
-    if (selectUser) {
-      document.title = selectUser.login;
-    }
-  }, [selectUser]);
+    axios
+      .get(`https://api.github.com/search/users?q=${props.term}`)
+      .then((res) => {
+        setUsers(res.data.items);
+      });
+  }, [props.term]);
+
   return (
     <ul>
       {users.map((u) => (
         <li
           key={u.id}
-          className={selectUser === u ? "selected" : ""}
+          className={props.selectUser === u ? "selected" : ""}
           onClick={() => {
-            setSelectUser(u);
+            props.onUserSelect(u);
           }}
         >
           {u.login}

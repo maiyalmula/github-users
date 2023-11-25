@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 const Input = (props) => {
-  const [tempSearch, setTempSearch] = useState("it-kamasutra");
+  const [tempSearch, setTempSearch] = useState(props.value);
+
+  useEffect(() => {
+    setTempSearch(props.value);
+  }, [props.value]);
 
   return (
     <div>
